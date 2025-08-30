@@ -1,26 +1,26 @@
 const express = require('express');
 const app = express();
-const adminRoutes = require('./admin');
+const path = require('path');
 
 // Phục vụ file tĩnh từ thư mục public
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Middleware để parse JSON
 app.use(express.json());
 
 // Route chính
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
+  res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
 // Route cho user
 app.get('/user', (req, res) => {
-  res.sendFile(__dirname + '/public/user.html');
+  res.sendFile(path.join(__dirname, '../public/user.html'));
 });
 
 // Route cho admin
 app.get('/admin', (req, res) => {
-  res.sendFile(__dirname + '/public/admin.html');
+  res.sendFile(path.join(__dirname, '../public/admin.html'));
 });
 
 // API endpoint để lấy dữ liệu gói code
@@ -33,12 +33,9 @@ app.get('/api/packages', (req, res) => {
   res.json(packages);
 });
 
-// Thêm admin routes
-app.use('/api/admin', adminRoutes);
-
 // Xử lý lỗi 404
 app.use((req, res) => {
-  res.status(404).send('Trang không tồn tại');
+  res.status(404).sendFile(path.join(__dirname, '../public/404.html'));
 });
 
 // Export app cho Vercel
